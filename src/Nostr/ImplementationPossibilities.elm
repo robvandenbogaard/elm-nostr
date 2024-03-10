@@ -1,4 +1,4 @@
-module Nostr.ImplementationPossibilities exposing (Kind, decode, encode, fromInt, toInt)
+module Nostr.ImplementationPossibilities exposing (Kind(..), decode, encode, fromInt, toInt)
 
 import Json.Decode as Decode
 import Json.Encode as Encode

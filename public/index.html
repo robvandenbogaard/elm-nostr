@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Nostr client</title>
+        <script type="text/javascript" src="main.js"></script>
+    </head>
+    <body>
+        <div id="app"></div>
+    </body>
+    <script type="text/javascript">
+     var app = Elm.Main.init({ node: document.getElementById('app') });
+
+     var sockets = {}
+
+     app.ports.sendMessage.subscribe(function(packet) {
+         var socket = sockets[packet.url];
+         if (socket) {
+             socket.send(packet.message);
+         } else {
+             socket = sockets[packet.url] = new WebSocket(packet.url);
+             socket.addEventListener("message", function(event) {
+                 app.ports.messageReceiver.send({url: packet.url, message: event.data});
+             });
+             socket.addEventListener("open", function(event) {
+                 socket.send(packet.message);
+             });
+         };
+     });
+    </script>
+</html>
